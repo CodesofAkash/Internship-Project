@@ -226,11 +226,14 @@ session_start();
 										?>
 									</div>
 								</div>
+								<div class="d-flex flex-column justify-content-center align-items-center">
+									<p class="text-center mt-4" style="font-size: 13px;">--- Thank you for visiting! ---</p>
+									<p class="text-center" style="font-size: 12px; color: #888;">&copy; <?php echo date('Y'); ?> CodesOfAkash. All rights reserved.</p>
+								</div>
 
-								<form action="print.php" method="POST" class="d-flex justify-content-center">
-									<button type="button" class="btn btn-outline-success">Print</button>
-								</form>
-
+								<div class="d-flex justify-content-center">
+									<a href="print.php" class="btn btn-outline-success">Print PDF</a>
+								</div>
 
 							</div>
 						</div>
