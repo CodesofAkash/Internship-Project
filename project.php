@@ -8,56 +8,20 @@ session_start();
 <head>
 	<meta charset="utf-8">
 	<title>Internship CRUD Project</title>
-	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="datatable/dataTable.bootstrap.min.css">
-	<style>
-		.height10 {
-			height: 10px;
-		}
-
-		.mtop10 {
-			margin-top: 10px;
-		}
-
-		.modal-label {
-			position: relative;
-			top: 7px
-		}
-
-		.link {
-			font-weight: 900;
-			color: blue;
-		}
-		.boxContainer{
-			display: flex;
-			width: 80vw;
-			height: 50vw;
-			padding: 32px;
-		}
-		.box1 {
-			height: 100%;
-			width: 25%;
-			border: 2px solid black;
-			margin-right: 10px;
-		}
-		.box2 {
-			height: 100%;
-			width: 40%;
-			border: 2px solid black;
-			margin-right: 10px;
-		}
-		.box3 {
-			height: 100%;
-			width: 25%;
-			border: 2px solid black;
-			margin-right: 10px;
-		}
-	</style>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
-	<div class="container">
-		<h1 class="page-header text-center">Restaurent Billing System</h1>
+	<div class="">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link" aria-current="page" href="http://localhost/internship/">Classwork</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="http://localhost/internship/project.php">Project</a>
+			</li>
+		</ul>
+		<h1 class="page-header text-center fs-3 my-4">Restaurent Billing System</h1>
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
 				<div class="row">
@@ -65,9 +29,9 @@ session_start();
 					if (isset($_SESSION['error'])) {
 						echo
 						"
-					<div class='alert alert-danger text-center'>
-						<button class='close'>&times;</button>
+					<div class='alert alert-danger alert-dismissible fade show text-center mx-auto' style='max-width: 500px;' role='alert'>
 						" . $_SESSION['error'] . "
+						<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
 					</div>
 					";
 						unset($_SESSION['error']);
@@ -75,9 +39,9 @@ session_start();
 					if (isset($_SESSION['success'])) {
 						echo
 						"
-					<div class='alert alert-success text-center'>
-						<button class='close'>&times;</button>
+					<div class='alert alert-success alert-dismissible fade show text-center mx-auto' style='max-width: 500px;' role='alert'>
 						" . $_SESSION['success'] . "
+						<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
 					</div>
 					";
 						unset($_SESSION['success']);
@@ -86,47 +50,197 @@ session_start();
 				</div>
 			</div>
 		</div>
-		<div class="boxContainer">
-			<div class="box1">
-					<h3 class="headings">Food Items</h3>
-			</div>
-			<div class="box2">
-					<h3 class="headings">Order Food</h3>
-			</div>
-			<div class="box3">
-					<h3 class="headings">Bill</h3>
+
+
+
+		<div class="album py-3 bg-light">
+			<div class="container">
+				<div class="row">
+
+
+
+					<div class="col-md-4">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title text-center">Menu</h3>
+								<div class="row mtop10">
+									<table id="myTable" class="table table-bordered table-striped">
+										<thead>
+											<th>Item ID</th>
+											<th>Item Name</th>
+											<th>Item Price</th>
+										</thead>
+										<tbody>
+											<?php
+											include_once('connection2.php');
+											$sql = "SELECT * FROM menu";
+											$menu;
+											$query = $conn->query($sql);
+											$i = 0;
+											while ($row = $query->fetch_assoc()) {
+												$menu[$i++] = $row['itemName'];
+												echo
+												"<tr>
+									<td>" . $row['itemID'] . "</td>
+									<td>" . $row['itemName'] . "</td>
+									<td>" . $row['itemPrice'] . "</td>
+								</tr>";
+											}
+
+											?>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class="col-md-4">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title text-center">Order Food</h3>
+								<div class="container">
+									<div class="row mb-4">
+										<form action="add2.php" method="POST" class="d-flex flex-column align-items-center justify-content-start gap-2 mt-2">
+											<select class="form-select" name="itemName" aria-label="Default select example">
+												<option value="" disabled selected>Select food item</option>
+												<?php
+												if (isset($menu) && is_array($menu)) {
+													foreach ($menu as $item) {
+														echo "<option value=\"{$item}\">{$item}</option>";
+													}
+												}
+												?>
+											</select>
+											<input type="number" name="quantity" class="form-control" placeholder="Quantity" aria-label="quantity">
+											<button type="submit" class="btn btn-outline-info">Add</button>
+										</form>
+									</div>
+									<div class="row">
+										<table id="myTable" class="table table-bordered table-striped">
+											<thead>
+												<th>S. No.</th>
+												<th>Item Name</th>
+												<th>Item Price</th>
+												<th>Quantity</th>
+											</thead>
+											<tbody>
+												<?php
+												include_once('connection2.php');
+												$sql = "SELECT * FROM foodOrder";
+												$query = $conn->query($sql);
+												if($query->num_rows > 0) {
+													while ($row = $query->fetch_assoc()) {
+													echo
+													"<tr>
+														<td>" . $row['sNo'] . "</td>
+														<td>" . $row['itemName'] . "</td>
+														<td> ₹" . $row['itemPrice'] . "</td>
+														<td>" . $row['quantity'] . "</td>
+													</tr>";
+													}
+												} else {
+													echo
+													"<td colspan='4' class='text-center'>
+														Add food items
+													</td>";
+												}
+
+												?>
+											</tbody>
+										</table>
+										<form class="d-flex justify-content-center" action="clear.php" method="POST">
+											<button type="submit" class="btn btn-outline-danger my-2">Clear</button>
+										</form>
+										<hr class="border border-primary border-3 opacity-75">
+										<form action="save.php" method="POST" class="d-flex flex-column align-items-center justify-content-start gap-2 my-2">
+											<input type="text" name="fullName" class="form-control" placeholder="Full Name" aria-label="Username">
+											<input type="number" name="phoneNumber" class="form-control" placeholder="Phone Number" aria-label="Username">
+											<button type="submit" class="btn btn-outline-success">Save</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class="col-md-4">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title text-center">Thank you for your purchase</h3>
+								<div class="row">
+									<?php
+									include_once('connection2.php');
+									$sql = "SELECT * FROM bill";
+									$query = $conn->query($sql);
+									while ($row = $query->fetch_assoc()) {
+										echo
+										"<ul class='list-unstyled'>
+																	<li class='text-black'>" . $row['fullName'] . "</li>
+																	<li class='text-muted mt-1'><span class='text-black'>Phone Number : </span>" . $row['phoneNumber'] . "</li>
+																	<li class='text-black mt-1'>" . $row['dateTime'] . "</li>
+																</ul>";
+									}
+									?>
+
+								</div>
+								<div class="row">
+									<table id="myTable" class="table table-bordered table-striped">
+										<thead>
+											<th>S. No.</th>
+											<th>Item Name</th>
+											<th>Item Price</th>
+											<th>Quantity</th>
+										</thead>
+										<tbody>
+											<?php
+											include_once('connection2.php');
+											$sql = "SELECT * FROM foodOrder";
+											$total = 0;
+											$query = $conn->query($sql);
+											while ($row = $query->fetch_assoc()) {
+												$total += $row['quantity'] * $row['itemPrice'];
+												echo
+												"<tr>
+									<td>" . $row['sNo'] . "</td>
+									<td>" . $row['itemName'] . "</td>
+									<td> ₹" . $row['itemPrice'] . "</td>
+									<td>" . $row['quantity'] . "</td>
+								</tr>";
+											}
+
+											?>
+										</tbody>
+									</table>
+								</div>
+
+								<div class="row text-black">
+
+									<div class="col-xl-12">
+										<?php
+										echo "<p class='float-end fw-bold'>Total: ₹$total </p>"
+										?>
+									</div>
+								</div>
+
+								<form action="print.php" method="POST" class="d-flex justify-content-center">
+									<button type="button" class="btn btn-outline-success">Print</button>
+								</form>
+
+
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-	<?php include('add_modal.php') ?>
 
-	<script src="jquery/jquery.min.js"></script>
-	<script src="bootstrap/js/bootstrap.min.js"></script>
-	<script src="datatable/jquery.dataTables.min.js"></script>
-	<script src="datatable/dataTable.bootstrap.min.js"></script>
-	<script>
-		$(document).ready(function() {
-			$('#myTable').DataTable();
-
-			$(document).on('click', '.close', function() {
-				$('.alert').hide();
-			})
-		});
-	</script>
-	<footer>
-		<div class="PP">
-			<p>Brought To You By:<a href="https://github.com/CodesofAkash"> CodesOfAkash</a> || <a class="link" href="http://localhost/internship"> Go back to class
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-						<path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-					</svg>
-				</a></p>
-		</div>
-	</footer>
-	<style>
-		.PP {
-			text-align: center;
-		}
-	</style>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
