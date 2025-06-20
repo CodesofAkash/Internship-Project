@@ -59,12 +59,15 @@
 				} 
 			?>
 			</div>
+
 			<div class="row">
 				<a href="#addnew" data-toggle="modal" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add</a>
 				<a href="print_pdf.php" class="btn btn-success pull-right"><span class="glyphicon glyphicon-print"></span> Print</a>
 			</div>
+
 			<div class="height10">
 			</div>
+			
 			<div class="row mtop10">
 				<table id="myTable" class="table table-bordered table-striped">
 					<thead>

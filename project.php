@@ -21,7 +21,7 @@ session_start();
 				<a class="nav-link" href="http://localhost/internship/project.php">Project</a>
 			</li>
 		</ul>
-		<h1 class="page-header text-center fs-3 my-4">Restaurent Billing System</h1>
+		<h1 class="page-header text-center fs-3 my-4">Restaurant Billing System</h1>
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
 				<div class="row">
